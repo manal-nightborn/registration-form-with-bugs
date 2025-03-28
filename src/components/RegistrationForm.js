@@ -45,12 +45,12 @@ const ErrorList = styled.ul`
 
 function RegistrationForm({ onSubmit }) {
   // Bug 2: Le champ 'password' n'est pas correctement initialisé dans defaultValues
-  const { register, handleSubmit, formState: { errors }, watch } = useForm({
+  const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm({
     defaultValues: {
       firstName: '',
       lastName: '',
       email: '',
-      // password manquant ici
+      password: '',
       confirmPassword: '',
       age: '',
       terms: false
@@ -62,28 +62,18 @@ function RegistrationForm({ onSubmit }) {
 
   // Bug 5: Composant qui se re-render inutilement à chaque frappe
   // Cet état n'est pas nécessaire et provoque des re-renders inutiles
-  const [inputValues, setInputValues] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    age: '',
-  });
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setInputValues(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setValue(name,value);
   };
 
   // Bug 6: Fonction map sans return dans l'affichage des erreurs
   const renderErrors = () => {
     if (Object.keys(errors).length > 0) {
-      // Bug: Pas de return ici
-      Object.entries(errors).map(([field, error]) => {
+      
+      return Object.entries(errors).map(([field, error]) => {
         <li key={field}>{field}: {error.message}</li>
       });
     }
@@ -149,7 +139,7 @@ function RegistrationForm({ onSubmit }) {
               // Bug 1: Validation incorrecte pour l'email
               // Utilisation d'une regex incorrecte qui accepte des emails invalides
               pattern: { 
-                value: /\S+@\S+/, 
+                value: /\S+@\S+\.[a-zA-Z]{2,}/, 
                 message: 'Veuillez entrer un email valide' 
               }
             })}

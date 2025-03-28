@@ -48,8 +48,7 @@ function FormField({ label, children, error }) {
       {label && <Label>{label}</Label>}
       <InputContainer hasError={!!error}>
         {children}
-        {/* Bug 3: Le message d'erreur devrait être affiché ici */}
-        {/* Manquant: {errorMessage} */}
+        {errorMessage} 
       </InputContainer>
     </FieldContainer>
   );
